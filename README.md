@@ -1,4 +1,4 @@
-# *sshole
+# sshole
 
 *sshhole flaw on musl-based systems.
 
