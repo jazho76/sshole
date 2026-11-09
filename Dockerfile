@@ -1,8 +1,7 @@
-
 FROM alpine:3.24
 
+# Install vulnerable version
 RUN apk add --no-cache build-base linux-headers openssl-dev zlib-dev
-
 WORKDIR /tmp
 RUN wget -qO- https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-10.3p1.tar.gz | tar xz \
     && cd openssh-10.3p1 \
@@ -10,10 +9,8 @@ RUN wget -qO- https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-10.3p
     && make -j$(nproc) \
     && make install
 
-RUN set -ex \
-    && adduser -D -H -s /sbin/nologin sshd \
-    && mkdir -p /var/empty \
-    && ssh-keygen -A \
+# Setup SSH server and users
+RUN ssh-keygen -A \
     && adduser -D user \
     && echo 'user:test' | chpasswd \
     && adduser -D other \
